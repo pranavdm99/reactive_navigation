@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  ros_env:
+    build: .
+    image: reactive_nav_img
+    container_name: reactive_nav_container
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - LIBGL_ALWAYS_SOFTWARE=1
+      - TURTLEBOT3_MODEL=burger
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - .:/root/ros2_ws/src/reactive_navigation
+    stdin_open: true
+    tty: true
+    privileged: true
