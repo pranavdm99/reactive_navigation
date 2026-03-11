@@ -138,7 +138,8 @@ def main(args=None):
         node.publisher_.publish(twist)
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, node.settings)
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

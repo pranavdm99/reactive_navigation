@@ -17,9 +17,9 @@ class AutonomousNavNode(Node):
         super().__init__('autonomous_nav_node')
         
         # Parameters
-        self.declare_parameter('max_speed', 0.15)
-        self.declare_parameter('safety_dist', 2.0)
-        self.declare_parameter('turning_speed', 0.3)
+        self.declare_parameter('max_speed', 0.21)
+        self.declare_parameter('safety_dist', 0.5)
+        self.declare_parameter('turning_speed', 0.5)
 
         # Subscribers
         self.scan_sub = self.create_subscription(LaserScan, 'scan', self.scan_callback, 10)
@@ -41,7 +41,7 @@ class AutonomousNavNode(Node):
         self.start_pos = None
         self.hit_point = None
         
-        self.timer = self.create_timer(0.1, self.control_loop)
+        self.timer = self.create_timer(0.05, self.control_loop)
         self.get_logger().info('Bug2 Autonomous Navigation Node Started')
 
     def odom_callback(self, msg):
@@ -124,7 +124,7 @@ class AutonomousNavNode(Node):
             if self.regions['front'] < safety_dist:
                 self.state = "WALL_FOLLOW"
                 self.hit_point = (curr_x, curr_y)
-                self.get_logger().warn("Obstacle hit! Switching to Wall Following")
+                self.get_logger().warn(f"OBSTACLE HIT! Front: {self.regions['front']:.2f}m. Switching to Wall Following (Left-Hand).")
             else:
                 # Move toward goal
                 goal_yaw = math.atan2(goal_y - curr_y, goal_x - curr_x)
@@ -132,25 +132,31 @@ class AutonomousNavNode(Node):
                 
                 if abs(angle_to_goal) > 0.1:
                     twist.angular.z = turning_speed if angle_to_goal > 0 else -turning_speed
+                    self.get_logger().info(f"GO_TO_POINT: Aligning to goal. Heading Error: {angle_to_goal:.2f} rad", throttle_duration_sec=2.0)
                 else:
                     twist.linear.x = max_speed
+                    self.get_logger().info(f"GO_TO_POINT: Moving towards goal. Dist: {dist_to_goal:.2f}m", throttle_duration_sec=2.0)
 
         elif self.state == "WALL_FOLLOW":
             if self.is_on_mline():
                 self.state = "GO_TO_POINT"
-                self.get_logger().info("M-Line encountered. Returning to Goal Seeking")
+                self.get_logger().info("M-LINE REACHED! Path to goal is clear. Returning to Goal Seeking.")
             else:
-                # Wall following logic (left-hand)
+                # Wall following logic (Left-Hand)
+                # Keep the wall on the robot's LEFT side
                 if self.regions['front'] < safety_dist:
-                    twist.angular.z = turning_speed # Turn right (if following left wall, need to turn right to avoid)
-                elif self.regions['fleft'] < safety_dist:
+                    # Inner Corner / Obstacle in front
+                    twist.angular.z = -turning_speed 
+                    self.get_logger().info(f"WALL_FOLLOW: [INNER CORNER] Obstacle in front ({self.regions['front']:.2f}m). Turning RIGHT.", throttle_duration_sec=1.0)
+                elif self.regions['fleft'] < safety_dist or self.regions['left'] < safety_dist:
+                    # Following wall
                     twist.linear.x = max_speed
-                elif self.regions['left'] < safety_dist:
-                    twist.linear.x = max_speed
+                    self.get_logger().info(f"WALL_FOLLOW: [FOLLOWING] Wall detected on Left (L:{self.regions['left']:.2f}m, FL:{self.regions['fleft']:.2f}m). Moving forward.", throttle_duration_sec=2.0)
                 else:
-                    # Too far from wall, turn left to find it
+                    # Outer Corner / Loss of wall
                     twist.linear.x = max_speed * 0.5
-                    twist.angular.z = -turning_speed * 0.5
+                    twist.angular.z = turning_speed * 0.5
+                    self.get_logger().info(f"WALL_FOLLOW: [OUTER CORNER] Wall lost on left. Turning LEFT to find boundary.", throttle_duration_sec=1.0)
 
         self.cmd_pub.publish(twist)
 
@@ -163,7 +169,8 @@ def main(args=None):
         pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
