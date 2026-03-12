@@ -57,7 +57,7 @@
           <geometry>
             <mesh>
               <!-- This resolves to share/reactive_nav/worlds/bug_world.stl via GAZEBO_MODEL_PATH -->
-              <uri>model://reactive_nav/worlds/bug_world.stl</uri>
+              <uri>model://reactive_nav/worlds/meshes/bug_world.stl</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -65,7 +65,7 @@
         <visual name='maze_visual'>
           <geometry>
             <mesh>
-              <uri>model://reactive_nav/worlds/bug_world.stl</uri>
+              <uri>model://reactive_nav/worlds/meshes/bug_world.stl</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>

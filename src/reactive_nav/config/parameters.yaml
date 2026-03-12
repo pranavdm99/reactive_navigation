@@ -1,0 +1,9 @@
+autonomous_nav_node:
+  ros__parameters:
+    max_speed: 0.22
+    safety_dist: 0.4
+    turning_speed: 0.5
+    goal_tolerance: 0.01
+    mline_tolerance: 0.1
+    progress_delta: 0.1
+    wall_side: "right"

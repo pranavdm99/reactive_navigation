@@ -61,17 +61,16 @@ def generate_launch_description():
         }.items()
     )
 
+    # Path to the parameters file
+    config_path = os.path.join(pkg_reactive_nav, 'config', 'parameters.yaml')
+
     # Autonomous Navigation Node
     auto_nav_node = Node(
         package='reactive_nav',
         executable='autonomous_nav_node',
         name='autonomous_nav_node',
         output='screen',
-        parameters=[
-            {'max_speed': 0.15},
-            {'safety_dist': 1.0},
-            {'turning_speed': 0.5},
-        ]
+        parameters=[config_path]
     )
 
     return LaunchDescription([
