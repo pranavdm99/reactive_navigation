@@ -6,4 +6,4 @@ autonomous_nav_node:
     goal_tolerance: 0.01
     mline_tolerance: 0.1
     progress_delta: 0.1
-    wall_side: "right"
+    wall_side: "left"
