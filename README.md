@@ -16,14 +16,13 @@ This project implements a robot navigation system in Gazebo using ROS 2 Humble. 
 
 ## 📂 Project Structure
 ```text
-HW3/
+reactive_navigation/
 ├── docker-compose.yml                      ← ⭐ Docker
 ├── Dockerfile
 ├── README.md                               ← ⭐ README
 ├── docs/
 │   ├── report.pdf                          ← ⭐ Report
 │   └── assets/
-│       ├── HW3_Video.mp4                   ← ⭐ Video
 │       ├── gazebo_isoview.png
 │       ├── gazebo_topview.png
 │       ├── navigation_summary.png
@@ -52,7 +51,6 @@ HW3/
 ```
 
 ### ⭐ Highlighted Files
-- Video: `docs/assets/bug2_autonav.mp4` for the demonstration
 - Code: `src/reactive_nav` is the ROS2 package
 - README: `README.md` for instructions
 - Report: `docs/report.pdf` containing all technical details
