@@ -15,11 +15,48 @@ This project implements a robot navigation system in Gazebo using ROS 2 Humble. 
 - **Dynamic Spawning**: Standards-compliant URDF injection and robot state publishing.
 
 ## 📂 Project Structure
-- `src/reactive_nav/reactive_nav/`: Core logic (Autonomous Navigation & Teleoperation).
-- `src/reactive_nav/worlds/`: Gazebo simulation environments and STL binary meshes.
-- `src/reactive_nav/config/`: Behavioral parameter configurations.
-- `src/reactive_nav/launch/`: Integrated ROS 2 launch system.
-- `docs/`: Technical reports and implementation details.
+```text
+HW3/
+├── docker-compose.yml                      ← ⭐ Docker
+├── Dockerfile
+├── README.md                               ← ⭐ README
+├── docs/
+│   ├── report.pdf                          ← ⭐ Report
+│   └── assets/
+│       ├── HW3_Video.mp4                   ← ⭐ Video
+│       ├── gazebo_isoview.png
+│       ├── gazebo_topview.png
+│       ├── navigation_summary.png
+│       ├── rviz2.png
+│       └── world.png
+└── src/
+    └── reactive_nav/                       ← ⭐ Code
+        ├── package.xml
+        ├── setup.cfg
+        ├── setup.py
+        ├── config/
+        │   └── parameters.yaml
+        ├── launch/
+        │   └── bug_behavior.launch.py
+        ├── reactive_nav/
+        │   ├── __init__.py
+        │   ├── autonomous_nav_node.py
+        │   └── teleop_node.py
+        ├── resource/
+        │   └── reactive_nav
+        ├── test/
+        └── worlds/
+            ├── bug_world.world
+            └── meshes/
+                └── bug_world.stl
+```
+
+### ⭐ Highlighted Files
+- Video: `docs/assets/bug2_autonav.mp4` for the demonstration
+- Code: `src/reactive_nav` is the ROS2 package
+- README: `README.md` for instructions
+- Report: `docs/report.pdf` containing all technical details
+- Docker: `docker-compose.yml` for containerization
 
 ## 🛠️ Quick Start
 
